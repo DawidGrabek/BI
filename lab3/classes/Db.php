@@ -36,9 +36,18 @@ class Db
 
   public function addMessage($name, $type, $content)
   {
-    $sql = "INSERT INTO message (`name`,`type`, `message`,`deleted`)
-    VALUES ('" . $name . "','" . $type . "','" . $content . "',0)";
-    return $this->mysqli->query($sql);
+    $sql = "INSERT INTO message (`name`, `type`, `message`, `deleted`) VALUES (?, ?, ?, 0)";
+    $stmt = $this->mysqli->prepare($sql);
+
+    if ($stmt) {
+      $stmt->bind_param("sss", $name, $type, $content);
+      $result = $stmt->execute();
+      $stmt->close();
+      return $result;
+    } else {
+      echo "Preparation failed: (" . $this->mysqli->errno . ") " . $this->mysqli->error;
+      return false;
+    }
   }
 
   public function getMessage($message_id)
