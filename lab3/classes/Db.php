@@ -38,7 +38,7 @@ class Db
   {
     $sql = "INSERT INTO message (`name`, `type`, `message`, `deleted`) VALUES (?, ?, ?, 0)";
     $stmt = $this->mysqli->prepare($sql);
-
+    echo $sql;
     if ($stmt) {
       $stmt->bind_param("sss", $name, $type, $content);
       $result = $stmt->execute();
