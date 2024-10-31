@@ -18,11 +18,13 @@ if (isset($_REQUEST['add_message'])) {
   <?php
   $sql = "SELECT * from message";
   $messages = $db->select($sql);
-  foreach ($messages as $msg): //returned as objects
+  foreach ($messages as $msg) {
     echo "<li>";
-    echo $msg->message;
+    echo htmlspecialchars($msg->message);  // Prevent XSS by encoding
+    // echo " - <a href='edit_message.php?id=" . htmlspecialchars($msg->id) . "'>Edit</a>";
     echo "</li>";
-  endforeach;
+  }
+
   ?>
 </ol>
 <hr>

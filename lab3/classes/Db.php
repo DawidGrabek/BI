@@ -36,9 +36,12 @@ class Db
 
   public function addMessage($name, $type, $content)
   {
+    // Apply addslashes to content
+    $content = addslashes($content);
+
     $sql = "INSERT INTO message (`name`, `type`, `message`, `deleted`) VALUES (?, ?, ?, 0)";
     $stmt = $this->mysqli->prepare($sql);
-    echo $sql;
+
     if ($stmt) {
       $stmt->bind_param("sss", $name, $type, $content);
       $result = $stmt->execute();
@@ -55,6 +58,48 @@ class Db
     foreach ($this->select_result as $message) {
       if ($message->id == $message_id)
         return $message->message;
+    }
+  }
+
+  public function insert($table, $data, $types)
+  {
+    foreach ($data as $key => $value) {
+      if (isset($types[$key])) {
+        // Filter data based on the specified type (name, email, text, etc.)
+        $data[$key] = Filter::filterData($value, $types[$key]);
+      }
+    }
+
+    $columns = implode(", ", array_keys($data));
+    $placeholders = implode(", ", array_fill(0, count($data), "?"));
+    $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+
+    try {
+      $stmt = $this->pdo->prepare($sql);
+      return $stmt->execute(array_values($data));
+    } catch (PDOException $e) {
+      echo "Insert failed: " . $e->getMessage();
+      return false;
+    }
+  }
+
+  public function update($table, $data, $types, $condition)
+  {
+    foreach ($data as $key => $value) {
+      if (isset($types[$key])) {
+        $data[$key] = Filter::filterData($value, $types[$key]);
+      }
+    }
+
+    $set = implode(", ", array_map(fn($key) => "$key = ?", array_keys($data)));
+    $sql = "UPDATE $table SET $set WHERE $condition";
+
+    try {
+      $stmt = $this->pdo->prepare($sql);
+      return $stmt->execute(array_values($data));
+    } catch (PDOException $e) {
+      echo "Update failed: " . $e->getMessage();
+      return false;
     }
   }
 }
