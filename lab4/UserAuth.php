@@ -46,4 +46,20 @@ class UserAuth
     }
     return false; // Login failed
   }
+
+  public function changePassword($userId, $newPassword)
+  {
+    // Generate a new unique salt
+    $newSalt = bin2hex(random_bytes(16));
+    // Hash the new password with the new salt
+    $newPasswordHash = hash('sha512', $newPassword . $newSalt);
+
+    // Update the user's password and salt in the database
+    $stmt = $this->pdo->prepare("UPDATE user SET password_hash = :password_hash, salt = :salt WHERE id = :id");
+    return $stmt->execute([
+      ':password_hash' => $newPasswordHash,
+      ':salt' => $newSalt,
+      ':id' => $userId
+    ]);
+  }
 }
