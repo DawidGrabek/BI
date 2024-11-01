@@ -1,4 +1,5 @@
 <?php
+include_once "Aes.php";
 class UserAuth
 {
   private $pdo;
@@ -14,9 +15,9 @@ class UserAuth
     $salt = bin2hex(random_bytes(16));
     $passwordHash = hash('sha512', $password . $salt);
 
-    // Encrypt the hash
+    // Encrypt the hash and encode it to base64
     $aes = new Aes();
-    $encryptedHash = $aes->encrypt($passwordHash);
+    $encryptedHash = base64_encode($aes->encrypt($passwordHash));
 
     $stmt = $this->pdo->prepare("INSERT INTO user (login, email, password_hash, salt) VALUES (:login, :email, :password_hash, :salt)");
     return $stmt->execute([
@@ -26,6 +27,7 @@ class UserAuth
       ':salt' => $salt
     ]);
   }
+
 
   public function loginUser($login, $password)
   {
