@@ -11,39 +11,36 @@ class UserAuth
 
   public function registerUser($login, $email, $password)
   {
-    // Generate a unique salt
-    $salt = bin2hex(random_bytes(16));
-    // Hash the password with the salt
-    $passwordHash = hash('sha512', $password . $salt);
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert the user into the database
-    $stmt = $this->pdo->prepare("INSERT INTO user (login, email, password_hash, salt) VALUES (:login, :email, :password_hash, :salt)");
-    return $stmt->execute([
+    $sql = "INSERT INTO user (login, email, password_hash) VALUES (:login, :email, :password_hash)";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([
       ':login' => $login,
       ':email' => $email,
-      ':password_hash' => $passwordHash,
-      ':salt' => $salt
+      ':password_hash' => $passwordHash
     ]);
+
+    return $stmt->rowCount() > 0;
   }
 
   public function loginUser($login, $password)
   {
-    // Retrieve the user's salt and password hash from the database
-    $stmt = $this->pdo->prepare("SELECT id, password_hash, salt FROM user WHERE login = :login");
+    $sql = "SELECT * FROM user WHERE login = :login";
+    $stmt = $this->pdo->prepare($sql);
     $stmt->execute([':login' => $login]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-      // Hash the entered password with the retrieved salt
-      $passwordHash = hash('sha512', $password . $user['salt']);
-
-      // Verify the hashed password matches the stored hash
-      if ($passwordHash === $user['password_hash']) {
-        // Successful login
-        $_SESSION['user_id'] = $user['id'];
+      if (password_verify($password, $user['password_hash'])) {
         return true;
+      } else {
+        echo "Successful login.";
+        return false;
       }
+    } else {
+      echo "User not found.";
+      return false;
     }
-    return false; // Login failed
   }
 }
