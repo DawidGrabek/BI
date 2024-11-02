@@ -3,9 +3,21 @@ session_start();
 include 'UserAuth.php';
 include 'Db.php';
 
-if (!isset($_SESSION['temp_user_id'])) {
-  header("Location: login.php");
+// Check if the session has expired
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 60)) {
+  // Session expired after 5 minutes
+  session_unset();     // Remove session variables
+  session_destroy();   // Destroy the session
+  header("Location: login.php?message=Session expired. Please log in again.");
   exit();
+}
+
+// Update last activity time
+$_SESSION['last_activity'] = time();
+
+// Initialize session expiration after successful login (e.g., after OTP verification)
+if (isset($_SESSION['user_id'])) {
+  $_SESSION['expire_time'] = time() + 60; // Set session expiration to 5 minutes from now
 }
 
 $db = new Db();

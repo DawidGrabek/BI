@@ -123,6 +123,11 @@ class UserAuth
     if ($user && $user['otp'] == $otp && strtotime($user['otp_expiry']) > time()) {
       // OTP is correct and not expired
       $this->clearOtp($userId); // Clear OTP after successful verification
+
+      // Initialize session expiration
+      $_SESSION['last_activity'] = time();
+      $_SESSION['expire_time'] = time() + 30; // Set session expiration time to 5 minutes
+
       return true;
     }
     return false;

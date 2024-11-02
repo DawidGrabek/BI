@@ -8,6 +8,19 @@ if (!isset($_SESSION['user_id'])) {
   exit();
 }
 
+// Check if the session has expired
+if (isset($_SESSION['expire_time']) && time() > $_SESSION['expire_time']) {
+  // Session expired
+  session_unset();
+  session_destroy();
+  header("Location: login.php?message=Session expired. Please log in again.");
+  exit();
+}
+
+// Update last activity time
+$_SESSION['last_activity'] = time();
+$_SESSION['expire_time'] = time() + 60; // Renew session expiration time
+
 $db = new Db();
 $userAuth = new UserAuth($db);
 
