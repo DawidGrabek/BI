@@ -3,6 +3,15 @@ session_start();
 include 'Db.php';
 include 'UserAuth.php';
 
+// Display a message if redirected due to session expiration
+if (isset($_GET['message'])) {
+  if ($_GET['message'] === 'session_expired') {
+    echo "<p style='color: red;'>Your session has expired. Please log in again.</p>";
+  } elseif ($_GET['message'] === 'not_logged_in') {
+    echo "<p style='color: red;'>You are not logged in. Please log in to continue.</p>";
+  }
+}
+
 // Create a new database connection
 $db = new Db("localhost", "root", "root", "lab4_bi");
 $auth = new UserAuth($db);

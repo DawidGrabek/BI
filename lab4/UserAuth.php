@@ -47,8 +47,10 @@ class UserAuth
       $passwordHash = hash('sha512', $password . $user['salt']);
 
       if ($passwordHash === $user['password_hash']) {
-        // Login successful, initiate 2FA
-        $_SESSION['temp_user_id'] = $user['id'];  // Temporarily store user ID
+        // Login successful, set session variables
+        $_SESSION['user_id'] = $user['id']; // Store user ID
+        $_SESSION['user_login'] = $login;   // Store login
+        $_SESSION['temp_user_id'] = $user['id']; // Store temp user ID for OTP
         $this->initiateTwoFactorAuth($user['id'], $user['email']);
         header("Location: otp_verification.php");
         exit();
@@ -56,6 +58,7 @@ class UserAuth
     }
     return false; // Login failed
   }
+
 
 
   public function changePassword($userId, $newPassword)

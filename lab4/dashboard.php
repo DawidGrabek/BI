@@ -3,8 +3,9 @@ session_start();
 require 'UserAuth.php';
 require 'Db.php';
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-  header("Location: login.php");
+  header("Location: login.php?message=not_logged_in");
   exit();
 }
 
@@ -13,14 +14,22 @@ if (isset($_SESSION['expire_time']) && time() > $_SESSION['expire_time']) {
   // Session expired
   session_unset();
   session_destroy();
-  header("Location: login.php?message=Session expired. Please log in again.");
+  header("Location: login.php?message=session_expired");
   exit();
 }
 
 // Update last activity time
 $_SESSION['last_activity'] = time();
-$_SESSION['expire_time'] = time() + 60; // Renew session expiration time
+$_SESSION['expire_time'] = time() + 300; // Renew session expiration time
 
+// Display user's login status
+if (isset($_SESSION['user_login'])) {
+  echo "<p>Logged in as: " . htmlspecialchars($_SESSION['user_login']) . "</p>";
+} else {
+  echo "<p>Not logged in</p>";
+}
+
+// Database connection
 $db = new Db();
 $userAuth = new UserAuth($db);
 
