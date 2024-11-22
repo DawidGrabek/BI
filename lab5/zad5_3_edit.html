@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Message</title>
+  </head>
+  <body>
+    <h1>Edit Message</h1>
+
+    <!-- Edit Message Form -->
+    <form method="POST" action="update_message.php">
+      <input type="hidden" name="message_id" value="1" />
+      <!-- Hidden field with the message ID -->
+
+      <p>ASD</p>
+      <label for="message_content">Edit your message:</label><br />
+      <textarea
+        id="message_content"
+        name="message_content"
+        rows="4"
+        cols="50"
+        required
+      >
+ASD2</textarea
+      ><br />
+
+      <button type="submit">Update Message</button>
+    </form>
+  </body>
+</html>

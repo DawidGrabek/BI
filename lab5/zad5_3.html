@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Message Management</title>
+  </head>
+  <body>
+    <h1>Message Management</h1>
+
+    <!-- Display messages -->
+    <h2>Messages:</h2>
+    <ul>
+      <li>
+        Message 1
+        <form method="POST" action="edit_message.php" style="display: inline">
+          <input type="hidden" name="message_id" value="1" />
+          <button type="submit">Edit</button>
+        </form>
+        <form method="POST" action="delete_message.php" style="display: inline">
+          <input type="hidden" name="message_id" value="1" />
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+      <li>
+        ASD2
+        <form method="POST" action="edit_message.php" style="display: inline">
+          <input type="hidden" name="message_id" value="1" />
+          <button type="submit">Edit</button>
+        </form>
+        <form method="POST" action="delete_message.php" style="display: inline">
+          <input type="hidden" name="message_id" value="1" />
+          <button type="submit">Delete</button>
+        </form>
+      </li>
+    </ul>
+
+    <!-- Add a new message -->
+    <h2>Add a New Message:</h2>
+    <form method="POST" action="add_message.php">
+      <label for="message_content">Message:</label><br />
+      <textarea
+        id="message_content"
+        name="message_content"
+        rows="4"
+        cols="50"
+        required
+      ></textarea
+      ><br />
+      <button type="submit">Add Message</button>
+    </form>
+  </body>
+</html>

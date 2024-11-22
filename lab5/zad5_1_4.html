@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zarządzanie uprawnieniami i rolami</title>
+  </head>
+  <body>
+    <h1>Zarządzanie uprawnieniami przypisanymi do ról</h1>
+
+    <h2>Lista uprawnień przypisanych do roli (ID roli: 1):</h2>
+    <ul>
+      <li>add message <button>Usuń</button></li>
+      <li>delete message <button>Usuń</button></li>
+      <li>view private <button>Usuń</button></li>
+      <li>edit message <button>Usuń</button></li>
+    </ul>
+    <form action="#" method="post">
+      <label for="permissionToAdd">ID uprawnienia do dodania:</label>
+      <input type="text" id="permissionToAdd" name="permissionToAdd" />
+      <button type="submit">Dodaj uprawnienie</button>
+    </form>
+
+    <hr />
+
+    <h1>Zarządzanie rolami użytkownika</h1>
+
+    <h2>Lista ról przypisanych użytkownikowi (ID użytkownika: 2):</h2>
+    <ul>
+      <li>Administrator <button>Usuń</button></li>
+      <li>Moderator <button>Usuń</button></li>
+    </ul>
+    <form action="#" method="post">
+      <label for="roleToAdd">ID roli do dodania:</label>
+      <input type="text" id="roleToAdd" name="roleToAdd" />
+      <button type="submit">Dodaj rolę</button>
+    </form>
+  </body>
+</html>

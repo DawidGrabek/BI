@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uprawnienia Użytkownika</title>
+  </head>
+  <body>
+    <h1>Witaj, ID: 11, rola: Administrator</h1>
+
+    <h2>Menu dostępne zgodnie z Twoimi uprawnieniami:</h2>
+    <ul>
+      <!-- Elementy będą widoczne tylko, jeśli użytkownik ma odpowiednie uprawnienia -->
+      <?php session_start(); ?>
+      <?php if (in_array('add message', $_SESSION['user_permissions'])): ?>
+      <li><a href="add_message.php">add message</a></li>
+      <?php endif; ?>
+
+      <?php if (in_array('delete message', $_SESSION['user_permissions'])): ?>
+      <li><a href="delete_message.php">delete message</a></li>
+      <?php endif; ?>
+
+      <li><a href="view_private.php">view private</a></li>
+      <?php endif; ?>
+
+      <?php if (in_array('edit message', $_SESSION['user_permissions'])): ?>
+      <li><a href="edit_message.php">edit message</a></li>
+      <?php endif; ?>
+    </ul>
+  </body>
+</html>
